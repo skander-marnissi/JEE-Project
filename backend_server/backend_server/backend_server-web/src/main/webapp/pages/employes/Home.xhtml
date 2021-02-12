@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+	   xmlns:h="http://xmlns.jcp.org/jsf/html"
+	   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	   xmlns:jsf="http://xmlns.jcp.org/jsf"
+	   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	   xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+	<!--  <ui:include src="/template/header.xhtml" /> -->
+	<title>Welcome Employee</title></h:head>
+	<h:body>
+	<ui:composition template="./../../template/templateEmployee.xhtml">
+		<ui:define name="content">
+			
+			
+		<ui:fragment rendered="#{employeHomeBean.inMission}">
+		    
+		    <div>
+		   		<h:form  id="form">
+		   	
+			
+			<p:panel header="Votre Mission">
+			
+			<p:panelGrid columns="2" layout="grid" styleClass="showcase-text-align-center">
+				
+			<p:commandButton value="Demande Remboursement" action="#{loginBean.toAjouterDemandeRemboursement()}"> </p:commandButton>
+			
+			
+			<p:commandButton value="Autre Demande" action="#{loginBean.toAjouterAutreDemande()}"> </p:commandButton>
+			
+			
+			
+			
+			
+			<p:outputLabel value="Titre de mission: "/>
+			
+			<p:outputLabel value="#{employeHomeBean.mission.name}"/>
+			
+			
+			<p:outputLabel value="Description: "/>
+			<p:outputLabel value="#{employeHomeBean.mission.description}"/>
+			
+			
+			<p:outputLabel value="Pays Mission: "/>
+			<p:outputLabel value="#{employeHomeBean.mission.paysMission}"/>
+			
+			
+			<p:outputLabel value="Lieu Mission: "/>
+			<p:outputLabel value="#{employeHomeBean.mission.lieuMission}"/>
+			
+			</p:panelGrid>
+		    
+		    </p:panel>
+		    
+		    	</h:form>    
+		    </div>
+		</ui:fragment>
+		
+				<ui:fragment rendered="#{!employeHomeBean.inMission}">
+		    <div>
+		   	
+		   		
+			<p:panelGrid styleClass="showcase-text-align-center">
+			
+			<p> Vous n'avez pas de mission en ce moment. </p>
+			
+			</p:panelGrid>
+			
+			</div>
+		   
+		</ui:fragment>
+			
+			
+			
+			
+		</ui:define>		
+	</ui:composition>
+	
+	
+	
+	
+	 </h:body>
+</html>

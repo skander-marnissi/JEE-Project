@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+	   xmlns:h="http://xmlns.jcp.org/jsf/html"
+	   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	   xmlns:jsf="http://xmlns.jcp.org/jsf"
+	   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	   xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+	<!--  <ui:include src="/template/header.xhtml" /> -->
+	<title>Consulter les autres demandes</title>
+	
+	  <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+	   
+	
+	</h:head>
+	
+
+<h:body>
+
+		
+	<ui:composition template="./../../template/templateManager.xhtml">
+		<ui:define name="content">
+					
+<h:panelGroup columns="2">
+
+	<h:form id="form">
+	
+		
+	 <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+		 <p:dataTable  var="demande" value="#{historiqueAutreDemandeBean.demandesTraiter}" widgetVar="empTable"
+	                 emptyMessage="No demande found with given criteria" filteredValue="#{historiqueAutreDemandeBean.filteredDemandes}"
+	                 globalFilterFunction="#{historiqueAutreDemandeBean.globalFilterFunction}" selection="#{historiqueAutreDemandeBean.selectedDemandes}" rowKey="#{demande.id}" >
+	 
+	        <f:facet name="header">
+	            <p:outputPanel>
+	                <h:outputText value="Recherche" />
+	                <p:inputText id="globalFilter" onkeyup="PF('empTable').filter()" placeholder="Mot clé"/>
+	            </p:outputPanel>
+	        </f:facet>
+	        
+	        
+ 		
+ 		
+ 		
+ 		 
+        <p:column headerText="Id">
+            <h:outputText value="#{demande.id}" />
+        </p:column>
+        
+        		<p:column headerText="Date Envoie:">
+	       		 <h:outputText value="#{historiqueAutreDemandeBean.formatDate(demande.dateEnvoie)}"/>
+	             </p:column>
+	             
+	             <p:column headerText="Date Validation:">
+	       		 <h:outputText value="#{historiqueAutreDemandeBean.formatDate(demande.dateValidation)}"/>
+	             </p:column>
+ 
+        <p:column headerText="raison">
+            <h:outputText value="#{demande.raison}" />
+        </p:column>
+ 
+     
+        
+        <p:column headerText="Type demande">
+            <h:outputText value="#{demande.typeDemande}" />
+        </p:column>
+        
+        
+        <p:column headerText="Etat demande">
+            <h:outputText value="#{demande.etatDemande}" />
+        </p:column>
+        
+        
+        
+        
+        <p:column headerText="Employee">
+        	 <h:outputText value="#{demande.user.nom} #{demande.user.prenom} " />
+        </p:column>
+
+ 		<p:column headerText="Detail" >
+             <p:commandButton update=":form:demandeDetail" oncomplete="PF('demandeDialog').show()" icon="pi pi-search" title="Detail">
+                <f:setPropertyActionListener value="#{demande}" target="#{historiqueAutreDemandeBean.selectedDemande}" />
+            </p:commandButton>
+        </p:column>
+        
+     
+          
+        
+    </p:dataTable>
+	
+	
+	
+
+	
+	
+	<p:dialog header="Demande Info" widgetVar="demandeDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="demandeDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty historiqueAutreDemandeBean.selectedDemande}" columnClasses="label,value">
+                
+                 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{historiqueAutreDemandeBean.selectedDemande.id}" />
+ 
+                <h:outputText value="Raison:" />
+                <h:outputText value="#{historiqueAutreDemandeBean.selectedDemande.raison}" />
+               
+            
+                 
+                <h:outputText value="Type Demande:" />
+                <h:outputText value="#{historiqueAutreDemandeBean.selectedDemande.typeDemande}" />
+                
+                <h:outputText value="Date envoie:" />
+                <h:outputText value="#{historiqueAutreDemandeBean.formatDate(historiqueAutreDemandeBean.selectedDemande.dateEnvoie)}" />
+                
+              	 <h:outputText value="Date Validation:" />
+                <h:outputText value="#{historiqueAutreDemandeBean.formatDate(historiqueAutreDemandeBean.selectedDemande.dateEnvoie)}" />
+                
+                  <h:outputText value="Etat Demande:" />
+                <h:outputText value="#{historiqueAutreDemandeBean.selectedDemande.etatDemande}" />
+                
+                
+                 
+ 
+                <h:outputText value="Employer:" />
+                <h:outputText value="#{historiqueAutreDemandeBean.selectedDemande.user.nom} #{historiqueAutreDemandeBean.selectedDemande.user.prenom}" />
+           
+                  
+             
+             
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+    <p:dialog header="User Info" widgetVar="userDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="userDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty historiqueAutreDemandeBean.selectedDemande}" columnClasses="label,value">
+                
+                 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{historiqueAutreDemandeBean.selectedDemande.user.id}" />
+ 
+                <h:outputText value="Nom:" />
+                <h:outputText value="#{historiqueAutreDemandeBean.selectedDemande.user.nom}" />
+                
+                <h:outputText value="Prenom:" />
+                <h:outputText value="#{historiqueAutreDemandeBean.selectedDemande.user.prenom}"/>
+           		
+           	
+ 
+
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+     
+
+	</h:form>
+
+
+
+</h:panelGroup>
+
+
+
+			
+			
+		</ui:define>		
+	</ui:composition>
+	
+
+	
+	 </h:body>
+</html>
+
+
+ 	

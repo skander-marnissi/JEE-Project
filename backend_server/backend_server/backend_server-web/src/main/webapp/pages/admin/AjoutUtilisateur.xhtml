@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+	   xmlns:h="http://xmlns.jcp.org/jsf/html"
+	   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	   xmlns:jsf="http://xmlns.jcp.org/jsf"
+	   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	   xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+	<!--  <ui:include src="/template/header.xhtml" /> -->
+	<title>Ajout utilisateur</title></h:head>
+	<h:body>
+	
+	<ui:composition template="./../../template/templateAdmin.xhtml">
+		<ui:define name="content">
+			
+	<h:form id="form">
+	<h:panelGrid columns="2">
+	<h:outputText value="Nom" />
+	<h:inputText value="#{ajoutUtilisateurBean.nom}" />
+	<h:outputText value="Prenom" />
+	<h:inputText value="#{ajoutUtilisateurBean.prenom}" />
+	<h:outputText value="Adresse" />
+	<h:inputText value="#{ajoutUtilisateurBean.adresse}" />
+	<h:outputText value="Tel" />
+	<h:inputText value="#{ajoutUtilisateurBean.tel}" />
+	
+	
+	<h:outputText value="Email" />
+	<h:inputText value="#{ajoutUtilisateurBean.email}" />
+	<h:outputText value="Mot de passe" />
+	<h:inputText value="#{ajoutUtilisateurBean.mdp}" />
+	
+ <h:outputText value="Role"></h:outputText>
+		<h:selectOneMenu value="#{ajoutUtilisateurBean.role}">
+		<f:selectItem itemLabel="Choisir Role" itemValue=""/>
+		<f:selectItems value="#{data.getRoles()}" />
+	</h:selectOneMenu>
+	
+	<h:commandButton id="btn" action="#{ajoutUtilisateurBean.doAjout()}" value="Ajout" />	
+	<h:message for="btn"/>
+	
+	</h:panelGrid>
+	
+	</h:form>
+			
+			
+
+		</ui:define>		
+	</ui:composition>
+	
+	
+	 </h:body>
+</html>

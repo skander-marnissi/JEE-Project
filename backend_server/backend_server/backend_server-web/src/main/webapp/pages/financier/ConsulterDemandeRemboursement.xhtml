@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+	   xmlns:h="http://xmlns.jcp.org/jsf/html"
+	   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	   xmlns:jsf="http://xmlns.jcp.org/jsf"
+	   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	   xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+	<!--  <ui:include src="/template/header.xhtml" /> -->
+	<title>Consulter les demandes Financier</title>
+	
+	  <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+	   
+	
+	</h:head>
+	
+
+<h:body>
+			
+	<ui:composition template="./../../template/templateFinancier.xhtml">
+		<ui:define name="content">
+			
+<h:panelGroup columns="2">
+
+	<h:form id="form">
+	
+	
+	 <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+		 <p:dataTable  var="demande" value="#{consulterDemandeRemboursementBean.demandes}" widgetVar="empTable"
+	                 emptyMessage="Auccune demande trouvée." filteredValue="#{consulterDemandeRemboursementBean.filteredDemandes}"
+	                 globalFilterFunction="#{consulterDemandeRemboursementBean.globalFilterFunction}" selection="#{consulterDemandeRemboursementBean.selectedDemandes}" rowKey="#{demande.id}" >
+	 
+	        <f:facet name="header">
+	            <p:outputPanel>
+	                <h:outputText value="Recherche" />
+	                <p:inputText id="globalFilter" onkeyup="PF('empTable').filter()"  placeholder="Mot clé"/>
+	            </p:outputPanel>
+	        </f:facet>
+	        
+	        
+ 		
+ 		
+ 		
+ 		 
+        <p:column headerText="Id:">
+            <h:outputText value="#{demande.id}" />
+        </p:column>
+        
+      <p:column headerText="Date Envoie:">
+	       <h:outputText value="#{consulterDemandeRemboursementBean.formatDate(demande.dateEnvoie)}"/>
+	  </p:column>
+ 
+        <p:column headerText="raison:">
+            <h:outputText value="#{demande.raison}" />
+        </p:column>
+ 
+     
+        
+        <p:column headerText="Type du frais:">
+            <h:outputText value="#{demande.typeFrais}" />
+        </p:column>
+        
+         <p:column headerText="Lieu:">
+            <h:outputText value="#{demande.user.mission.lieuMission}" />
+        </p:column>
+        
+       
+        
+        
+        
+        <p:column headerText="Employee:">
+         <h:outputText value="#{demande.user.nom} #{demande.user.prenom}" />
+		</p:column>
+      
+      <p:column headerText="Mission:">
+        <h:outputText value="#{demande.user.mission.name}" />
+	</p:column>
+         
+     <p:column headerText="Montant:">
+        <h:outputText value="#{demande.montant}" />
+	</p:column>
+         
+ 	
+ 		<p:column>
+             <p:commandButton update=":form:demandeDetail" oncomplete="PF('demandeDialog').show()" icon="pi pi-search" title="Detail">
+                <f:setPropertyActionListener value="#{demande}" target="#{consulterDemandeRemboursementBean.selectedDemande}" />
+            </p:commandButton>
+        </p:column>
+        
+        <p:column>
+             <p:commandButton id="btn" action="#{consulterDemandeRemboursementBean.rejectDemande(demande.id)}" update="@form" icon="pi pi-trash" title="Rejeter">
+      		
+            </p:commandButton>
+        </p:column>
+           <p:column>
+             <p:commandButton id="btn2" action="#{consulterDemandeRemboursementBean.acceptDemande(demande.id)}"  icon="pi pi-plus" title="Accepter">
+             	  <f:setPropertyActionListener value="#{mission}" target="#{consulterDemandeRemboursementBean.selectedDemande}" />
+      	
+            </p:commandButton>
+        </p:column>
+        
+    </p:dataTable>
+	
+	
+	
+
+	
+	
+	<p:dialog header="Demande Info" widgetVar="demandeDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="demandeDetail" >
+            <p:panelGrid  columns="2" rendered="#{not empty consulterDemandeRemboursementBean.selectedDemande}" columnClasses="label,value">
+                
+                 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.id}" />
+ 
+                <h:outputText value="Raison:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.raison}" />
+               
+            
+                 
+                <h:outputText value="Typefrais:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.typeFrais}" />
+                
+                <h:outputText value="Lieu:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.mission.lieuMission}"/>
+                
+   
+              	 <h:outputText value="Date envoie:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.formatDate(consulterDemandeRemboursementBean.selectedDemande.dateEnvoie)}" />
+                
+              
+                
+                
+                <h:outputText value="Employer:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.nom} #{consulterDemandeRemboursementBean.selectedDemande.user.prenom}" />
+             
+             	<h:outputText value="Mission:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.mission.name}"/>
+                
+                  
+             
+             
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+    <p:dialog header="User Info" widgetVar="userDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="userDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty consulterDemandeRemboursementBean.selectedDemande}" columnClasses="label,value">
+                
+                 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.id}" />
+ 
+                <h:outputText value="Nom:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.nom}" />
+                
+                <h:outputText value="Progression:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.prenom}"/>
+                
+                <h:outputText value="Statut:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.role}"/>
+ 
+ 
+
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+     <p:dialog header="Mission Info" widgetVar="missionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="missionDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty consulterDemandeRemboursementBean.selectedDemande}" columnClasses="label,value">
+                
+                 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.mission.id}" />
+ 
+                <h:outputText value="Nom:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.mission.name}" />
+                
+                <h:outputText value="Description:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.mission.description}"/>
+                
+                <h:outputText value="Progression:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.mission.progression}"/>
+                
+                <h:outputText value="Lieu mission:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.mission.lieuMission}"/>
+ 
+ 				<h:outputText value="Date debut:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.mission.dateDebut}"/>
+ 				
+ 				<h:outputText value="Date fin:" />
+                <h:outputText value="#{consulterDemandeRemboursementBean.selectedDemande.user.mission.dateFin}"/>
+ 
+ 
+ 
+
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+     
+
+	</h:form>
+
+
+</h:panelGroup>
+		</ui:define>		
+	</ui:composition>
+	
+
+	
+	 </h:body>
+</html>
+

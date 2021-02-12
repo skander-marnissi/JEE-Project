@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+	   xmlns:h="http://xmlns.jcp.org/jsf/html"
+	   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	   xmlns:jsf="http://xmlns.jcp.org/jsf"
+	   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	   xmlns:p="http://primefaces.org/ui">
+	   
+	   
+	   	
+	<h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+
+	<h:head>
+	<!--  <ui:include src="/template/header.xhtml" /> -->
+	<title>Ajout Mission</title></h:head>
+	<h:body>
+		
+	<ui:composition template="./../../template/templateManager.xhtml">
+		<ui:define name="content">
+			<h:form id="form">
+
+	
+	<p:panel header="Ajout Mission : ">
+	
+	<p:messages>
+            <p:autoUpdate />
+     </p:messages>
+     
+	<h:panelGrid columns="1">
+		
+	
+		
+		<p:outputLabel for="titre" value="Titre:" />
+		<p:inputText id="titre" value="#{ajoutMissionBean.name}" required="true" label="titre"/>
+		<p:message for="titre" />
+        <h:outputText value="#{ajoutMissionBean.name}" />
+		
+		<p:outputLabel for="description" value="Description:" />
+		<p:inputTextarea id="description" cols="30" rows="2"  value="#{ajoutMissionBean.description}" required="true"  label="Description"/>
+		<p:message for="description" />
+        <h:outputText value="#{ajoutMissionBean.description}" />
+		
+		<p:outputLabel for="@next" value="Pays mission:" />
+        <p:selectOneMenu id="trl" value="#{ajoutMissionBean.pays}" style="width:300px;" dir="rtl">
+            <f:selectItem itemLabel="Choisir Pays" itemValue="" />
+            <f:selectItems value="#{data.getCountryCodes()}" />
+     	</p:selectOneMenu>
+		
+		
+		<p:outputLabel  for="lieuxMission" value="Adresse Mission:" />
+		<p:inputText id="lieuxMission" value="#{ajoutMissionBean.lieuxMission}" required="true" label="Adresse Mission"/>
+		<p:message for="lieuxMission" />
+        <h:outputText value="#{ajoutMissionBean.lieuxMission}" />
+	
+		
+		
+		<p:outputLabel for="dateDeb" value="Date debut:" />
+	    <p:calendar id="dateDeb" value="#{ajoutMissionBean.dateDebut}" showOn="button" mindate="#{now}" required="true" label="Date debut"/>
+	    	
+         <p:message for="dateDeb" />
+          <h:outputText value="#{ajoutMissionBean.dateDebut}">
+                <f:convertDateTime pattern="dd/MM/yy" />
+           </h:outputText>
+           
+	      
+	    <p:outputLabel for="dateFin" value="Date fin:" />
+	    <p:calendar id="dateFin" value="#{ajoutMissionBean.dateFin}" showOn="button" mindate="#{now}" required="true" label="Date fin"/>
+	
+		 <p:message for="dateFin" />
+          <h:outputText value="#{ajoutMissionBean.dateFin}">
+                <f:convertDateTime pattern="dd/MM/yy" />
+           </h:outputText>
+           
+	
+	 <p:dataTable id="checkboxDT" var="user" value="#{ajoutMissionBean.users}" widgetVar="empTable"
+                 emptyMessage="Accun Employee trouvé." filteredValue="#{ajoutMissionBean.filteredUsers}"
+                 globalFilterFunction="#{ajoutMissionBean.globalFilterFunction}" selection="#{ajoutMissionBean.selectedUsers}" rowKey="#{user.id}" >
+ 
+        <f:facet name="header">
+            <p:outputPanel>
+                <h:outputText value="Recherche :" />
+                <p:inputText id="globalFilter" onkeyup="PF('empTable').filter()"  placeholder="Mot clé"/>
+            </p:outputPanel>
+        </f:facet>
+ 		
+ 		 <p:column selectionMode="multiple"/>
+ 		 
+        <p:column headerText="Id">
+            <h:outputText value="#{user.id}" />
+        </p:column>
+ 
+        <p:column headerText="Nom">
+            <h:outputText value="#{user.nom}" />
+        </p:column>
+ 
+        <p:column headerText="Prenom">
+            <h:outputText value="#{user.prenom}" />
+        </p:column>
+ 
+        <p:column headerText="email">
+            <h:outputText value="#{user.email}" />
+        </p:column>
+ 
+        <p:column headerText="etat">
+            <h:outputText value="#{user.etat}" />
+        </p:column>
+ 	
+ 	<f:facet name="footer">
+            <p:commandButton process="checkboxDT" update=":form:multiUserDetail" icon="pi pi-search" value="Detail" oncomplete="PF('multiUserDialog').show()" />
+     </f:facet>
+        
+    </p:dataTable>
+	
+	
+	
+	</h:panelGrid>
+	
+	
+	<p:dialog header="Employee selectionner" widgetVar="multiUserDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="220">
+        <p:outputPanel id="multiUserDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty consulterMissionBean.selectedUsers}" columnClasses="label,value">
+              
+		            
+		            <ui:repeat value="#{consulterMissionBean.selectedUsers}" var="user">
+		                <br></br>
+		                
+		                <h:outputText value="Id:" />
+		                <h:outputText value="#{consulterMissionBean.selectedUser.id}" />
+		 
+		                <h:outputText value="Nom:" />
+		                <h:outputText value="#{consulterMissionBean.selectedUser.nom}" />
+		                
+		             
+		            </ui:repeat>
+		            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+	
+	
+	
+	<p:commandButton id="btn" value="Ajouter" action="#{ajoutMissionBean.redirectToConsulter()}">
+    	<f:actionListener binding="#{ajoutMissionBean.doAjout()}"/>
+    	<f:actionListener binding="#{consulterMissionBean.init()}"/>
+	</p:commandButton>
+	
+	
+	</p:panel>
+	</h:form>
+	
+	
+
+	
+			
+			
+		</ui:define>		
+	</ui:composition>
+	
+	
+	
+	 </h:body>
+</html>

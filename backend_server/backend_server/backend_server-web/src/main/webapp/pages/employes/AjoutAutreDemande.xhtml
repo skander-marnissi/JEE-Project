@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+	   xmlns:h="http://xmlns.jcp.org/jsf/html"
+	   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	   xmlns:jsf="http://xmlns.jcp.org/jsf"
+	   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	   xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+	<!--  <ui:include src="/template/header.xhtml" /> -->
+	<title>Ajouter Autre Demande</title></h:head>
+	<h:body>
+	
+	<ui:composition template="./../../template/templateEmployee.xhtml">
+		<ui:define name="content">
+		<h:form  id="form">
+
+	
+	
+	
+		
+
+	<p:panel header="Creation Autre Demande : ">
+	
+		<p:messages>
+	            <p:autoUpdate />
+	     </p:messages>
+		
+		<h:panelGrid columns="2">
+		
+			<p:outputLabel for="@next" value="Type Demande" />
+	        <p:selectOneMenu id="trl" value="#{ajoutAutreDemandeBean.typeDemande}" dir="rtl">
+	            <f:selectItem itemLabel="Choisir Type" itemValue="" />
+	            <f:selectItems value="#{data.getTypeDemandes()}" />
+	     
+	        </p:selectOneMenu>
+			
+			<p:outputLabel for="raison" value="Raison: " />
+			<p:inputTextarea id="raison" cols="30" rows="2" value="#{ajoutAutreDemandeBean.raison}" required="true" label="Raison"/>
+			<p:message for="raison" />
+        	<h:outputText value="#{ajoutAutreDemandeBean.raison}" />
+			
+			<p:commandButton id="btn" action="#{ajoutAutreDemandeBean.doAjout()}" update="@form" value="Envoyer" />	
+			
+			
+		
+		
+		
+	
+
+	
+	
+	</h:panelGrid>
+	
+	</p:panel>
+	</h:form>
+		</ui:define>		
+	</ui:composition>
+	
+	
+	
+	
+	
+	
+	 </h:body>
+</html>

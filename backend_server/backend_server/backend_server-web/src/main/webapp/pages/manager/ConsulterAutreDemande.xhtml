@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+	   xmlns:h="http://xmlns.jcp.org/jsf/html"
+	   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	   xmlns:jsf="http://xmlns.jcp.org/jsf"
+	   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	   xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+	<!--  <ui:include src="/template/header.xhtml" /> -->
+	<title>Consulter Autre Demande</title>
+	
+	  <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+	   
+	
+	</h:head>
+	
+
+<h:body>
+
+		
+	<ui:composition template="./../../template/templateManager.xhtml">
+		<ui:define name="content">
+					
+<h:panelGroup columns="2">
+
+	<h:form id="form">
+	
+		
+	 <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+		 <p:dataTable id="checkboxDT" var="demande" value="#{consulterAutreDemandeBean.demandes}" widgetVar="empTable"
+	                 emptyMessage="Auccune Demande trouvée." filteredValue="#{consulterAutreDemandeBean.filteredDemandes}"
+	                 globalFilterFunction="#{consulterAutreDemandeBean.globalFilterFunction}" selection="#{consulterAutreDemandeBean.selectedDemandes}" rowKey="#{demande.id}" >
+	 
+	        <f:facet name="header">
+	            <p:outputPanel>
+	                <h:outputText value="Recherche" />
+	                <p:inputText id="globalFilter" onkeyup="PF('empTable').filter()"  placeholder="Mot clé"/>
+	            </p:outputPanel>
+	        </f:facet>
+	        
+	        
+ 		
+ 		
+ 		
+ 		 
+        <p:column headerText="Id">
+            <h:outputText value="#{demande.id}" />
+        </p:column>
+        
+        <!-- <p:column headerText="Date d'envoie">
+        	<h:outputText value="#{demande.dateEnvoie}" >
+   				<f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
+			</h:outputText> 
+            
+        </p:column>-->
+ 
+        <p:column headerText="raison">
+            <h:outputText value="#{demande.raison}" />
+        </p:column>
+ 
+     
+        
+        <p:column headerText="Type du frais">
+            <h:outputText value="#{demande.typeDemande}" />
+        </p:column>
+        
+        <p:column headerText="Date Envoie:">
+	        <h:outputText value="#{consulterAutreDemandeBean.formatDate(demande.dateEnvoie)}"/>
+	                
+	        
+        </p:column>
+        
+         
+        
+        
+        
+        <p:column headerText="Employee">
+        	 <h:outputText value="#{demande.user.nom} #{demande.user.prenom} " />
+        </p:column>
+
+ 		<p:column headerText="Detail">
+             <p:commandButton update=":form:demandeDetail" oncomplete="PF('demandeDialog').show()" icon="pi pi-search" title="Detail">
+                <f:setPropertyActionListener value="#{demande}" target="#{consulterAutreDemandeBean.selectedDemande}" />
+            </p:commandButton>
+        </p:column>
+        
+     
+           <p:column headerText="Accepter">
+             <p:commandButton action="#{consulterAutreDemandeBean.acceptDemande(demande.id)}"  icon="pi pi-plus" title="Accepter">
+             	  <f:setPropertyActionListener value="#{demande}" target="#{consulterAutreDemandeBean.selectedDemande}" />
+      	
+            </p:commandButton>
+        </p:column>
+        
+           <p:column headerText="Rejeter">
+             <p:commandButton action="#{consulterAutreDemandeBean.rejectDemande(demande.id)}" update="@form" icon="pi pi-trash" title="Rejeter">
+      		
+            </p:commandButton>
+        </p:column>
+        
+    </p:dataTable>
+	
+	
+	
+
+	
+	
+	<p:dialog header="Demande Info" widgetVar="demandeDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="demandeDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty consulterAutreDemandeBean.selectedDemande}" columnClasses="label,value">
+                
+                 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{consulterAutreDemandeBean.selectedDemande.id}" />
+ 
+                <h:outputText value="Raison:" />
+                <h:outputText value="#{consulterAutreDemandeBean.selectedDemande.raison}" />
+               
+            
+                 
+                <h:outputText value="Type Demande:" />
+                <h:outputText value="#{consulterAutreDemandeBean.selectedDemande.typeDemande}" />
+                
+              
+              	 <h:outputText value="Date envoie:" />
+                <h:outputText value="#{consulterAutreDemandeBean.formatDate(consulterAutreDemandeBean.selectedDemande.dateEnvoie)}" />
+                
+              
+ 
+                <h:outputText value="Employee:" />
+                <h:outputText value="#{consulterAutreDemandeBean.selectedDemande.user.nom} #{consulterAutreDemandeBean.selectedDemande.user.prenom}" />
+           
+                  
+             
+             
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+    <p:dialog header="User Info" widgetVar="userDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="userDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty consulterAutreDemandeBean.selectedDemande}" columnClasses="label,value">
+                
+                 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{consulterAutreDemandeBean.selectedDemande.user.id}" />
+ 
+                <h:outputText value="Nom:" />
+                <h:outputText value="#{consulterAutreDemandeBean.selectedDemande.user.nom}" />
+                
+                <h:outputText value="Prenom:" />
+                <h:outputText value="#{consulterAutreDemandeBean.selectedDemande.user.prenom}"/>
+           
+ 
+
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+     
+
+	</h:form>
+
+
+
+</h:panelGroup>
+
+
+			
+			
+		</ui:define>		
+	</ui:composition>
+	
+
+	
+	 </h:body>
+</html>
+
+   
+ 	

@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+	   xmlns:h="http://xmlns.jcp.org/jsf/html"
+	   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	   xmlns:jsf="http://xmlns.jcp.org/jsf"
+	   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	   xmlns:p="http://primefaces.org/ui">
+	   
+	   <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+	   
+
+	<h:head>
+	<!--  <ui:include src="/template/header.xhtml" /> -->
+	<title>Consulter Mission</title></h:head>
+	<h:body>
+		
+			
+	<ui:composition template="./../../template/templateManager.xhtml">
+		<ui:define name="content">
+			<h:panelGroup columns="2">
+<h:form id="form">
+
+	
+ 	<p:remoteCommand name="form" autoRun="true" action="#{consulterMissionBean.init()}" />
+
+	 <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+	 <p:dataTable id="checkboxDT" var="mission" value="#{consulterMissionBean.missions}" widgetVar="empTable"
+                 emptyMessage="Auccune Mission trouvée. " filteredValue="#{consulterMissionBean.filteredMissions}"
+                 globalFilterFunction="#{consulterMissionBean.globalFilterFunction}" selection="#{consulterMissionBean.selectedMissions}" rowKey="#{mission.id}" >
+ 
+        <f:facet name="header">
+            <p:outputPanel>
+                <h:outputText value="Recherche : " />
+                <p:inputText id="globalFilter" onkeyup="PF('empTable').filter()" placeholder="Mot clé"/>
+            </p:outputPanel>
+        </f:facet>
+        
+        
+ 		
+ 		
+ 		
+ 		 
+        <p:column headerText="Id:">
+            <h:outputText value="#{mission.id}" />
+        </p:column>
+ 
+        <p:column headerText="Nom:">
+            <h:outputText value="#{mission.name}" />
+        </p:column>
+        
+        <p:column headerText="Pays Mission:">
+            <h:outputText value="#{mission.paysMission}" />
+        </p:column>
+        
+   
+        <p:column headerText="Progression:">
+            <h:outputText value="#{mission.progression}" />
+        </p:column>
+        
+        <p:column headerText="Date debut:">
+	        <h:outputText value="#{mission.dateDebut}">
+	                <f:convertDateTime pattern="dd/MM/yy" />
+	         </h:outputText>
+        </p:column>
+        
+         <p:column headerText="Date fin:">
+	        <h:outputText value="#{mission.dateFin}">
+	                <f:convertDateTime pattern="dd/MM/yy" />
+	         </h:outputText>
+        </p:column>
+        
+        <p:column headerText="Employee affecter" style="width:400px;">
+        
+        <p:dataTable id="userDt" var="user" value="#{mission.users}">
+        	
+            
+			<p:column headerText="Id:">
+              	<h:outputText value="#{user.id}" />
+ 			</p:column>
+ 			
+ 			<p:column headerText="Nom:">
+              <h:outputText value="#{user.nom}" />
+ 			</p:column>
+ 			
+ 			<p:column headerText="prenom:">
+                <h:outputText value="#{user.prenom}" />
+             </p:column>
+             
+         
+        
+        <p:column>
+             <p:commandButton update=":form:userDetail" oncomplete="PF('userDialog').show()" icon="pi pi-search" title="Detail">
+                <f:setPropertyActionListener value="#{user}" target="#{consulterMissionBean.selectedUser}" />
+            </p:commandButton>
+        </p:column>
+        
+            <p:column>
+             <p:commandButton  id="btn2" action="#{consulterMissionBean.removeUserFromMission(user.id)}" update=":form:checkboxDT:userDt" icon="pi pi-trash" title="Delete">
+                <f:setPropertyActionListener value="#{user}" target="#{consulterMissionBean.selectedUser}" />
+            </p:commandButton>
+        </p:column>
+        
+        
+        
+        </p:dataTable>
+ 
+      </p:column>
+         
+ 	
+ 		<p:column>
+             <p:commandButton update=":form:missionDetail" oncomplete="PF('missionDialog').show()" icon="pi pi-search" title="View">
+                <f:setPropertyActionListener value="#{mission}" target="#{consulterMissionBean.selectedMission}" />
+            </p:commandButton>
+        </p:column>
+        
+             <p:column>
+             <p:commandButton action="#{consulterMissionBean.editMission()}"  icon="pi pi-pencil" title="Edit">
+             	  <f:setPropertyActionListener value="#{mission}" target="#{consulterMissionBean.selectedMission}" />
+      	
+            </p:commandButton>
+        </p:column>
+        
+        <p:column>
+             <p:commandButton id="btn" action="#{consulterMissionBean.removeMission(mission.id)}" update="@form" icon="pi pi-trash" title="Delete">
+      		
+            </p:commandButton>
+        </p:column>
+      
+        
+    </p:dataTable>
+	
+	
+	
+
+	
+	
+	<p:dialog header="Mission Info" widgetVar="missionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="missionDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty consulterMissionBean.selectedMission}" columnClasses="label,value">
+                
+                 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{consulterMissionBean.selectedMission.id}" />
+ 
+                <h:outputText value="Nom:" />
+                <h:outputText value="#{consulterMissionBean.selectedMission.name}" />
+                
+                <h:outputText value="Progression:" />
+                <h:outputText value="#{consulterMissionBean.selectedMission.progression}"/>
+ 
+              
+               <h:outputText value="Date debut:" />
+              <h:outputText value="#{consulterMissionBean.selectedMission.dateDebut}">
+	                <f:convertDateTime pattern="dd/MM/yy" />
+	         </h:outputText>
+             
+                <h:outputText value="Date fin:" />
+			<h:outputText value="#{consulterMissionBean.selectedMission.dateFin}">
+	                <f:convertDateTime pattern="dd/MM/yy" />
+	         </h:outputText>
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+    <p:dialog header="User Info" widgetVar="userDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="userDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty consulterMissionBean.selectedUser}" columnClasses="label,value">
+                
+                 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{consulterMissionBean.selectedUser.id}" />
+ 
+                <h:outputText value="Nom:" />
+                <h:outputText value="#{consulterMissionBean.selectedUser.nom}" />
+                
+                <h:outputText value="Progression:" />
+                <h:outputText value="#{consulterMissionBean.selectedUser.prenom}"/>
+ 
+
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+     
+
+	</h:form>
+
+
+
+</h:panelGroup>
+			
+		</ui:define>		
+	</ui:composition>
+	
+
+	
+	 </h:body>
+</html>

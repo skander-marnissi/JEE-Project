@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+	   xmlns:h="http://xmlns.jcp.org/jsf/html"
+	   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	   xmlns:jsf="http://xmlns.jcp.org/jsf"
+	   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	   xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+	<!--  <ui:include src="/template/header.xhtml" /> -->
+	<title>Consulter les demandes Employee</title>
+	
+	  <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+	   
+	
+	</h:head>
+	
+
+<h:body>
+
+		
+	<ui:composition template="./../../template/templateEmployee.xhtml">
+		<ui:define name="content">
+					
+<h:panelGroup columns="2">
+
+	<h:form id="form">
+	
+		
+	 <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />
+		 <p:dataTable id="checkboxDT" var="demande" value="#{consulterAutreDemandeEmpBean.demandes}" widgetVar="empTable"
+	                 emptyMessage="Auccune demande trouvée." filteredValue="#{consulterAutreDemandeEmpBean.filteredDemandes}"
+	                 globalFilterFunction="#{consulterAutreDemandeEmpBean.globalFilterFunction}" selection="#{consulterAutreDemandeEmpBean.selectedDemandes}" rowKey="#{demande.id}" >
+	 
+	        <f:facet name="header">
+	            <p:outputPanel>
+	                <h:outputText value="Recherche" />
+	                <p:inputText id="globalFilter" onkeyup="PF('empTable').filter()"  placeholder="Mot clé"/>
+	            </p:outputPanel>
+	        </f:facet>
+	        
+	        
+ 		
+
+ 
+        <p:column headerText="raison">
+            <h:outputText value="#{demande.raison}" />
+        </p:column>
+ 
+     
+        
+        <p:column headerText="Type demande">
+            <h:outputText value="#{demande.typeDemande}" />
+        </p:column>
+        
+        <p:column headerText="Etat demande">
+            <h:outputText value="#{demande.etatDemande}" />
+        </p:column>
+        
+        
+       
+        
+        
+
+
+ 		<p:column headerText="Detail">
+             <p:commandButton update=":form:demandeDetail" oncomplete="PF('demandeDialog').show()" icon="pi pi-search" title="Detail">
+                <f:setPropertyActionListener value="#{demande}" target="#{consulterAutreDemandeEmpBean.selectedDemande}" />
+            </p:commandButton>
+        </p:column>
+        
+     
+           <p:column headerText="Rejeter">
+             <p:commandButton id="btn" action="#{consulterAutreDemandeEmpBean.deleteDemande(demande.id)}" update="@form" icon="pi pi-trash" title="Rejeter">
+      		
+            </p:commandButton>
+        </p:column>
+        
+    </p:dataTable>
+	
+	
+	
+
+	
+	
+	<p:dialog header="Demande Info" widgetVar="demandeDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="demandeDetail">
+            <p:panelGrid  columns="2" rendered="#{not empty consulterAutreDemandeEmpBean.selectedDemande}" columnClasses="label,value">
+      
+      
+                <h:outputText value="Raison:" />
+                <h:outputText value="#{consulterAutreDemandeEmpBean.selectedDemande.raison}" />
+               
+            
+                 
+                <h:outputText value="Type Demande:" />
+                <h:outputText value="#{consulterAutreDemandeEmpBean.selectedDemande.typeDemande}" />
+                
+              
+ 
+             
+             
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+    
+    
+    
+     
+
+	</h:form>
+
+
+
+</h:panelGroup>
+
+
+			
+			
+		</ui:define>		
+	</ui:composition>
+	
+
+	
+	 </h:body>
+</html>
+
+      
+ 	

@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset-UTF-8"/>
+	
+			<h:outputStylesheet  name="css/layout.css" />
+			<h:outputStylesheet  name="css/sweetalert.css" />
+	
+	
+	<h:outputStylesheet name="css/default.css"></h:outputStylesheet>
+	
+	   	
+	<h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+</h:head>
+
+<body>
+	
+		 
+	<div id="top">
+	<ui:insert name="top"></ui:insert>
+	<h:form>  
+		 
+		  <p:growl id="messages"/>
+		  <p:menubar>
+			
+		      <p:menuitem value="Menu" oncomplete="PF('sidebar1').show()"  icon="pi pi-list"/>
+		
+		      <f:facet name="options">
+		         
+		           <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
+				   
+				    	<img  class="responsive-img" style="max-width: 64px;" src="../../resources/images/avatar.png"/>
+		  	
+				    	<p:menu>
+					       <p:submenu label="Gestion utilisateur"> 
+					           
+					            <p:menuitem value="Ajouter" action="#{loginBean.toAjouterUtilisateur()}" update="messages" icon="pi pi-user-plus"/>
+					            <p:menuitem value="Consulter" action="#{loginBean.toConsulterUtilisateur()}"  update="messages" icon="pi pi-eye"/>
+					           
+					      </p:submenu>
+					        
+					     </p:menu>   
+					     
+				    	<p:commandButton action="#{loginBean.doLogout()}" value="Logout" icon="pi pi-power-off"/>
+					</p:sidebar>
+			
+		            <p:commandButton action="#{loginBean.doLogout()}" value="Logout" icon="pi pi-power-off" />
+		           
+		        </f:facet>
+		    </p:menubar>
+		 
+		    
+		    
+		</h:form>
+	</div>
+	
+	<div id="content" class="left_content">
+	<ui:insert name="content">Content</ui:insert>
+	</div>
+	<div id="bottom">
+	<ui:insert name="bottom"></ui:insert>
+	<center>Copyright Botix 2020</center>
+	</div>
+	
+</body>
+
+</html>
+
